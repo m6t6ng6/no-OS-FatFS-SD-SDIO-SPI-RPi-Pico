@@ -35,6 +35,8 @@ int main() {
     // Initialize stdio
     stdio_init_all();
 
+    sleep_ms(5000);
+
     puts("Hello, world!");
 
     // See FatFs - Generic FAT Filesystem Module, "Application Interface",
