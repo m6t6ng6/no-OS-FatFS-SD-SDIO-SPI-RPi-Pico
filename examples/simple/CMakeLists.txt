@@ -1,53 +1,55 @@
-# == DO NOT EDIT THE FOLLOWING LINES for the Raspberry Pi Pico VS Code Extension to work ==
-if(WIN32)
-    set(USERHOME $ENV{USERPROFILE})
-else()
-    set(USERHOME $ENV{HOME})
-endif()
-set(sdkVersion 2.0.0)
-set(toolchainVersion 13_2_Rel1)
-set(picotoolVersion 2.0.0)
-set(picoVscode ${USERHOME}/.pico-sdk/cmake/pico-vscode.cmake)
-if (EXISTS ${picoVscode})
-    include(${picoVscode})
-endif()
-# ====================================================================================
 cmake_minimum_required(VERSION 3.5)
-
-set(PICO_BOARD pico2 CACHE STRING "Board type")
-
-# Pull in Pico SDK (must be before project)
-include(pico_sdk_import.cmake)
 
 project(simple_example C CXX ASM)
 
-# Initialise the Raspberry Pi Pico SDK
-pico_sdk_init()
-
-add_subdirectory(../../src build)
-
-# Add executable. Default name is the project name, version 0.1
-add_executable(simple_example 
-    main.c
-    hw_config.c
+# linea para libreria
+add_library(simple_example STATIC
+    ../../src/ff15/source/ff.c
+    ../../src/ff15/source/ffunicode.c
+    #../../src/ff15/source/diskio.c
+    ../../src/ff15/source/ffsystem.c
+    #../../src/ff15/documents/res/app6.c
+    #../../src/ff15/documents/res/app2.c
+    #../../src/ff15/documents/res/app5.c
+    #../../src/ff15/documents/res/app1.c
+    #../../src/ff15/documents/res/app4.c
+    #../../src/ff15/documents/res/app3.c
+    ../../src/sd_driver/sd_card.c
+    ../../src/sd_driver/sd_timeouts.c
+    ../../src/sd_driver/SPI/sd_spi.c
+    ../../src/sd_driver/SPI/my_spi.c
+    ../../src/sd_driver/SPI/sd_card_spi.c
+    ../../src/sd_driver/SDIO/sd_card_sdio.c
+    ../../src/sd_driver/SDIO/rp2040_sdio.c
+    ../../src/sd_driver/dma_interrupts.c
+    ../../src/src/ff_stdio.c
+    ../../src/src/util.c
+    ../../src/src/crash.c
+    ../../src/src/my_rtc.c
+    ../../src/src/my_debug.c
+    ../../src/src/file_stream.c
+    ../../src/src/crc.c
+    ../../src/src/f_util.c
+    ../../src/src/glue.c
 )
-# Can leave these off for silent mode:
-# add_compile_definitions(USE_PRINTF USE_DBG_PRINTF)
-add_compile_definitions(USE_PRINTF)
 
-# Add the standard library and FatFS/SPI to the build
 target_link_libraries(simple_example 
     pico_stdlib
-    no-OS-FatFS-SD-SDIO-SPI-RPi-Pico
+    #no-OS-FatFS-SD-SDIO-SPI-RPi-Pico
+    hardware_pio
+    hardware_dma
+    hardware_spi
+    cmsis_core
+    pico_aon_timer
 )
 
-pico_set_program_name(simple_example "simple_example")
-pico_set_program_version(simple_example "0.1")
-
-# Choose source and destination for standard input and output:
-#   See 4.1. Serial input and output on Raspberry Pi Pico in Getting started with Raspberry Pi Pico (https://datasheets.raspberrypi.org/pico/getting-started-with-pico.pdf)
-#   and 2.7.1. Standard Input/Output (stdio) Support in Raspberry Pi Pico C/C++ SDK (https://datasheets.raspberrypi.org/pico/raspberry-pi-pico-c-sdk.pdf):
-pico_enable_stdio_uart(simple_example 1)
-pico_enable_stdio_usb(simple_example 1)
-
-pico_add_extra_outputs(simple_example)
+target_include_directories(simple_example PUBLIC
+    ../../include/FsLib/
+    ../../include/
+    ../../include/iostream/
+    ../../src/include/
+    ../../src/ff15/source/
+    ../../src/sd_driver/
+    ../../src/sd_driver/SDIO/
+    ../../src/sd_driver/SPI/
+)
