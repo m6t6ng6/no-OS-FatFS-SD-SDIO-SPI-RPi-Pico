@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(simple_example C CXX ASM)
+project(pico_sd_fatfs C CXX ASM)
 
 # linea para libreria
-add_library(simple_example STATIC
+add_library(pico_sd_fatfs STATIC
     ../../src/ff15/source/ff.c
     ../../src/ff15/source/ffunicode.c
     #../../src/ff15/source/diskio.c
@@ -33,7 +33,7 @@ add_library(simple_example STATIC
     ../../src/src/glue.c
 )
 
-target_link_libraries(simple_example 
+target_link_libraries(pico_sd_fatfs 
     pico_stdlib
     #no-OS-FatFS-SD-SDIO-SPI-RPi-Pico
     hardware_pio
@@ -43,7 +43,7 @@ target_link_libraries(simple_example
     pico_aon_timer
 )
 
-target_include_directories(simple_example PUBLIC
+target_include_directories(pico_sd_fatfs PUBLIC
     ../../include/FsLib/
     ../../include/
     ../../include/iostream/
